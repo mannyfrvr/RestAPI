@@ -4,62 +4,50 @@ from pydantic import BaseModel
 app = FastAPI()
 
 
+# Data model using Pydantic
 class Person(BaseModel):
-    id: int
     name: str
     age: int
 
 
-persons = {
-    1: Person(id=1, name="Damilola Boyewa", age=20),
-    2: Person(id=2, name="Manuel Richard", age=20),
-}
+# In-memory data store (replace with your database)
+db = []
 
 
+# The home page
 @app.get("/")
 def home_page():
-    return "Welcome, app is running"
+    return "Welcome, page is running"
 
 
-@app.post("/api")
-def create_person(person: Person):
-    if person.id in persons:
-        raise HTTPException(status_code=400, detail="Person already exists")
-
-    # Additional validation for age (for example, age should be between 0 and 50)
-    if not 0 <= person.age <= 50:
-        raise HTTPException(status_code=400, detail="Invalid age")
-
-    persons[person.id] = person
-    return person
+# Create a new person
+@app.post("/api/")
+async def create_person(person: Person):
+    db.append(person)
+    return {"message": "Person created successfully"}
 
 
-@app.get("/api/{user_id}")
-def read_person(user_id: int):
-    if user_id not in persons:
-        raise HTTPException(status_code=404, detail="Person not found")
-    return persons[user_id]
+# Read a person by index (replace with database query)
+@app.get("/api/{person_id}")
+async def read_person(person_id: int):
+    if 0 <= person_id < len(db):
+        return db[person_id]
+    raise HTTPException(status_code=404, detail="Person not found")
 
 
-@app.put("/api/{user_id}")
-def update_person(user_id: int, person: Person):
-    if user_id not in persons:
-        raise HTTPException(status_code=404, detail="Person not found")
-
-    if person.id != user_id:
-        raise HTTPException(status_code=400, detail="Person id mismatch")
-
-    # Additional validation for age (for example, age should be between 0 and 50)
-    if not 0 <= person.age <= 50:
-        raise HTTPException(status_code=400, detail="Invalid age")
-
-    persons[user_id] = person
-    return person
+# Update a person by index (replace with database query)
+@app.put("/api/{person_id}")
+async def update_person(person_id: int, updated_person: Person):
+    if 0 <= person_id < len(db):
+        db[person_id] = updated_person
+        return {"message": "Person updated successfully"}
+    raise HTTPException(status_code=404, detail="Person not found")
 
 
-@app.delete("/api/{user_id}")
-def delete_person(user_id: int):
-    if user_id not in persons:
-        raise HTTPException(status_code=404, detail="Person not found")
-    del persons[user_id]
-    return {"message": "Person deleted successfully"}
+# Delete a person by index (replace with database query)
+@app.delete("/api/{person_id}")
+async def delete_person(person_id: int):
+    if 0 <= person_id < len(db):
+        deleted_person = db.pop(person_id)
+        return {"message": "Person deleted successfully", "deleted_person": deleted_person}
+    raise HTTPException(status_code=404, detail="Person not found")
