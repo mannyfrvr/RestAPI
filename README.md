@@ -23,14 +23,31 @@ The API is built with Python and FastAPI, and it uses an in-memory data store fo
 
 ## Installation and Setup
 
-1. Create a virtual environment and activate it:
+## Getting Started
+
+### Prerequisites
+
+Before you begin, ensure you have met the following requirements:
+
+- Python 3.7 or higher installed.
+- (Add any database-specific prerequisites if applicable)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/yourusername/person-api.git
+   cd person-api
+
+2. Create a virtual environment and activate it:
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-2. Install dependencies:
+3. Install dependencies:
    pip install -r requirements.txt
    
-3. Run the FastAPI application:
+4. Run the FastAPI application:
    uvicorn main:app --reload
 The API will be accessible at http://localhost:8000.
 
@@ -48,41 +65,58 @@ POST /api
 Content-Type: application/json
 
 {
-  "name": "Manuel Richard"
+  "name": "Damilola Boyewa"
 }
 Response:
 {
-  "id": 1,
-  "name": "Manuel Richard"
+  "id": 0,
+  "name": "Damilola Boyewa"
 }
 
 ## Get a Person
-GET /api/1
+GET /api/0
 
 Response:
 {
-  "id": 1,
-  "name": "Manuel Richard"
+  "id": 0,
+  "name": "Damilola Boyewa"
 }
 
 ## Update a Person
-PUT /api/1
+PUT /api/0
 Content-Type: application/json
 
 {
-  "name": "Damilola Boyewa"
+  "name": "ManuelRichard"
 }
 
 Response:
 {
-  "id": 1,
-  "name": "Damilola Boyewa"
+  "id": 0,
+  "name": "ManuelRichard"
 }
 
 ## Delete a Person
-DELETE /api/1
+DELETE /api/0
 
 Response:
 {
   "message": "Person deleted"
 }
+
+
+## UML Diagram
+
+   +------------------+          +------------------------+
+   |     Person       |          |   PersonRepository     |
+   +------------------+          +------------------------+
+   | - name: str      |          | + add_person()          |
+   | - age: int       |--------->| + get_person()          |
+   |                  |          | + update_person()       |
+   | + create_person()|          | + delete_person()       |
+   | + read_person()  |          +------------------------+
+   | + update_person()|
+   | + delete_person()|
+   +------------------+
+
+
