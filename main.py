@@ -21,7 +21,7 @@ def home_page():
 
 
 # Create a new person
-@app.post("/api/")
+@app.post("/api")
 async def create_person(person: Person):
     db.append(person)
     return {"message": "Person created successfully"}
