@@ -6,6 +6,7 @@ app = FastAPI()
 
 # Data model using Pydantic
 class Person(BaseModel):
+    id: int
     name: str
     age: int
 
