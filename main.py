@@ -29,7 +29,7 @@ async def create_person(person: Person):
 
 
 # Read a person by index (replace with database query)
-@app.get("/api/{person_id}")
+@app.get("/api/{person_id}", response_model=Person)
 async def read_person(person_id: int):
     if 0 <= person_id < len(db):
         return db[person_id]
